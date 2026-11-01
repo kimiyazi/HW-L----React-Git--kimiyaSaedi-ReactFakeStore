@@ -1,19 +1,26 @@
 import { useState } from "react";
 import React from "react";
 import style from "./searchFilter.module.scss";
-import { all } from "axios";
 
 
 
-const SearchFilter = ({products, selectCategories , setSelectCategories, categories}) => {
+const SearchFilter = ({products,
+    selectCategories ,
+    setSelectCategories,
+    categories,
+    searchVal ,
+    setSearchVal,
+    setAppliedSearch
+  }) => {
 
-  const [searchVal, setSearchVal] = useState("")
   const [minPrice, setMinPrice] = useState("")
   const [maxPrice, setMaxPrice] = useState("")
 
+  const handelSearch = ()=>{
+    setAppliedSearch(searchVal);
+  };
+
  
-
-
   return (
   
 
@@ -21,7 +28,7 @@ const SearchFilter = ({products, selectCategories , setSelectCategories, categor
     <div className={style.searchBar}>
         <label htmlFor="search">جستجوی محصولات: </label>
         <input type="text" value={searchVal}  onChange={(e)=> setSearchVal(e.target.value) }  id="search" placeholder="نام محصول را جستجو کنید" />
-        <button >جستجو</button>
+        <button onClick={handelSearch} >جستجو</button>
     </div>
 
     <div className={style.categoryFilter} >

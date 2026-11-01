@@ -3,12 +3,12 @@ import MenuItem from "./component/MenuItem";
 import Header from "./component/Header";
 import SearchFilter from "./component/searchFilter";
 import { useEffect, useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
-import { all } from "axios";
 
 function App() {
   const [products, setProducts] = useState([]);
   const [selectCategories, setSelectCategories] = useState("all");
+  const [ searchVal, setSearchVal] = useState("");
+  const [appliedSearch, setAppliedSearch] = useState("");
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
@@ -19,13 +19,16 @@ function App() {
   const categories = [...new Set(products.map((product) => product.category))];
 
   const FilteredProducts = products.filter((product)=>{
-    return selectCategories==="all" || product.category === selectCategories
+    return (selectCategories==="all" || product.category === selectCategories) && product.title.toLowerCase().includes(appliedSearch.toLowerCase())
   })
 
   return (
     <div className={styles.appContainer}>
       <Header />
       <SearchFilter 
+      searchVal={searchVal}
+      setSearchVal={setSearchVal}
+      setAppliedSearch= {setAppliedSearch}
       products={products} 
       categories={categories}
       selectCategories = {selectCategories}
