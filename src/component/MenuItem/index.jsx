@@ -3,6 +3,7 @@ import styles from "./menuItem.module.scss"
 
 const MenuItem =({title,subtitle,image,price}) => {
     return(
+        
         <div className={styles.wrapper}  >
             <div>
                 <img src={image} alt={title} />
@@ -12,6 +13,7 @@ const MenuItem =({title,subtitle,image,price}) => {
                 
             </div>
         </div>
+        
     )
 }
 

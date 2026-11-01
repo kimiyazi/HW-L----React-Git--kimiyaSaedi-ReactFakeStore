@@ -1,9 +1,10 @@
 import styles from "./app.module.scss";
 import MenuItem from "./component/MenuItem";
 import Header from "./component/Header";
-import SearchFilter from "./component/SearchFilter";
+import SearchFilter from "./component/searchFilter";
 import { useEffect, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
+import { all } from "axios";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -17,12 +18,21 @@ function App() {
 
   const categories = [...new Set(products.map((product) => product.category))];
 
+  const FilteredProducts = products.filter((product)=>{
+    return selectCategories==="all" || product.category === selectCategories
+  })
+
   return (
     <div className={styles.appContainer}>
       <Header />
-      <SearchFilter />
+      <SearchFilter 
+      products={products} 
+      categories={categories}
+      selectCategories = {selectCategories}
+      setSelectCategories = {setSelectCategories}
+      />
       <div className={styles.products}>
-        {products.map((product) => {
+        {FilteredProducts.map((product) => {
           return (
             <MenuItem
               key={product.id}
