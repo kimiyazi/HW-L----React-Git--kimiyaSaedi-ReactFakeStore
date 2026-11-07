@@ -9,6 +9,8 @@ function App() {
   const [selectCategories, setSelectCategories] = useState("all");
   const [ searchVal, setSearchVal] = useState("");
   const [appliedSearch, setAppliedSearch] = useState("");
+  const [appliedMinPrice, setAppliedMinPrice] = useState("");
+  const [appliedMaxPrice, setAppliedMaxPrice] = useState("");
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
@@ -19,10 +21,25 @@ function App() {
   const categories = [...new Set(products.map((product) => product.category))];
 
   const FilteredProducts = products.filter((product)=>{
-    return (selectCategories==="all" || product.category === selectCategories) && product.title.toLowerCase().includes(appliedSearch.toLowerCase())
+
+    console.log(
+  product.price >= Number(appliedMinPrice),
+  product.price <= Number(appliedMaxPrice),
+  appliedMinPrice,
+  appliedMaxPrice
+);
+
+    return ((selectCategories==="all" || product.category === selectCategories)
+    && product.title.toLowerCase().includes(appliedSearch.toLowerCase())
+    && (!appliedMinPrice || product.price >= Number(appliedMinPrice) )
+    && (!appliedMaxPrice || product.price <= Number(appliedMaxPrice)))
+
   })
 
+
   return (
+    
+
     <div className={styles.appContainer}>
       <Header />
       <SearchFilter 
@@ -33,6 +50,10 @@ function App() {
       categories={categories}
       selectCategories = {selectCategories}
       setSelectCategories = {setSelectCategories}
+      appliedMinPrice={appliedMinPrice}
+      setAppliedMinPrice={setAppliedMinPrice}
+      appliedMaxPrice={appliedMaxPrice}
+      setAppliedMaxPrice={setAppliedMaxPrice}
       />
       <div className={styles.products}>
         {FilteredProducts.map((product) => {

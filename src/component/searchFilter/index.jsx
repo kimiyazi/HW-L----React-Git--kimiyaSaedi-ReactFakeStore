@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import style from "./searchFilter.module.scss";
 
@@ -10,25 +10,39 @@ const SearchFilter = ({products,
     categories,
     searchVal ,
     setSearchVal,
-    setAppliedSearch
+    setAppliedSearch,
+    appliedMinPrice,
+    setAppliedMinPrice,
+    appliedMaxPrice,
+    setAppliedMaxPrice,
+
   }) => {
 
   const [minPrice, setMinPrice] = useState("")
   const [maxPrice, setMaxPrice] = useState("")
 
-  const handelSearch = ()=>{
+useEffect(()=>{
+  const timer = setTimeout(()=>{
     setAppliedSearch(searchVal);
+  },500);
+
+  return ()=>{
+    clearTimeout(timer)
   };
+}, [searchVal, setAppliedSearch]);
+
+  const handlePriceFilter = ()=>{
+    setAppliedMinPrice(minPrice);
+    setAppliedMaxPrice(maxPrice);
+  }
 
  
   return (
   
-
   <div className={style.SearchFilter}>
     <div className={style.searchBar}>
         <label htmlFor="search">جستجوی محصولات: </label>
         <input type="text" value={searchVal}  onChange={(e)=> setSearchVal(e.target.value) }  id="search" placeholder="نام محصول را جستجو کنید" />
-        <button onClick={handelSearch} >جستجو</button>
     </div>
 
     <div className={style.categoryFilter} >
@@ -42,12 +56,12 @@ const SearchFilter = ({products,
 
     <div className={style.priceFilter}>
 
-      <button >اعمال فیلتر قیمت</button>
+      <button onClick={handlePriceFilter}>اعمال فیلتر قیمت</button>
 
-      <label htmlFor="min-price" >حداقل قیمت </label>
+      <label htmlFor="min-price" >حداکثر قیمت </label>
       <input type="number" id="min-price" min={0} value={minPrice} onChange={(e)=> setMinPrice(e.target.value) } />
 
-      <label htmlFor="max-price" >حداکثر قیمت</label>
+      <label htmlFor="max-price" >حداقل قیمت</label>
       <input type="number" id="max-price" min={0} value={maxPrice} onChange={(e)=>setMaxPrice(e.target.value)} />
 
     </div>
