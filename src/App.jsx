@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 function App() {
   const [products, setProducts] = useState([]);
   const [selectCategories, setSelectCategories] = useState("all");
-  const [ searchVal, setSearchVal] = useState("");
+  const [searchVal, setSearchVal] = useState("");
   const [appliedSearch, setAppliedSearch] = useState("");
   const [appliedMinPrice, setAppliedMinPrice] = useState("");
   const [appliedMaxPrice, setAppliedMaxPrice] = useState("");
@@ -16,7 +16,11 @@ function App() {
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((response) => response.json())
-      .then((data) => setProducts(data));
+      .then((data) => {
+        setProducts(data)
+        localStorage.setItem("products",JSON.stringify(data));
+      });
+      
   }, []);
 
   const categories = [...new Set(products.map((product) => product.category))];
