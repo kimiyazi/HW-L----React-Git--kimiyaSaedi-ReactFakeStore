@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from "./menuItem.module.scss"
 
-const MenuItem =({title,subtitle,image,price}) => {
+const MenuItem =({title,subtitle,image,price, onClick}) => {
     return(
         
-        <div className={styles.wrapper}  >
+        <div className={styles.wrapper} onClick={onClick} >
             <div>
                 <img src={image} alt={title} />
                 <p>Name: {title}</p>

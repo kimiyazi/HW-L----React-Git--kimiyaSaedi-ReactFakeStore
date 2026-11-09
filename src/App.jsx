@@ -11,6 +11,7 @@ function App() {
   const [appliedSearch, setAppliedSearch] = useState("");
   const [appliedMinPrice, setAppliedMinPrice] = useState("");
   const [appliedMaxPrice, setAppliedMaxPrice] = useState("");
+  const [selectProduct, setSelectProduct] = useState(null);
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
@@ -22,12 +23,6 @@ function App() {
 
   const FilteredProducts = products.filter((product)=>{
 
-    console.log(
-  product.price >= Number(appliedMinPrice),
-  product.price <= Number(appliedMaxPrice),
-  appliedMinPrice,
-  appliedMaxPrice
-);
 
     return ((selectCategories==="all" || product.category === selectCategories)
     && product.title.toLowerCase().includes(appliedSearch.toLowerCase())
@@ -35,6 +30,14 @@ function App() {
     && (!appliedMaxPrice || product.price <= Number(appliedMaxPrice)))
 
   })
+
+  const similarProducts = selectProduct
+    ? products.filter((product)=>{
+      return (
+        product.category === selectProduct.category &&
+        product.id != selectProduct.id
+      );
+  }) : [];
 
 
   return (
@@ -64,10 +67,43 @@ function App() {
               title={product.title}
               subtitle={product.category}
               price={product.price}
+              onClick={()=> setSelectProduct(product)}
             />
           );
         })}
       </div>
+
+      
+      {selectProduct && (
+
+        <div className={styles.modal}>
+
+          <div className={styles.modalContent}>
+            <button onClick={()=>setSelectProduct(null)}>
+               x
+            </button>
+
+            <h3>Similar Products</h3>
+
+            <div className={styles.products}>
+
+            {similarProducts.map((product) => (
+              <MenuItem
+              key={product.id}
+              image={product.image}
+              title={product.title}
+              subtitle={product.category}
+              price={product.price}
+              />
+              ))}
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      
+
     </div>
   );
 }
